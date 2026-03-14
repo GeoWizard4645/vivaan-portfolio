@@ -1,14 +1,289 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vivaan Shahani | Portfolio</title>
-    <script type="module" crossorigin src="/vivaan-portfolio/assets/index-D1QsFpSN.js"></script>
-    <link rel="stylesheet" crossorigin href="/vivaan-portfolio/assets/index-CZTGVdHC.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            color: #1f2937;
+            overflow-x: hidden;
+        }
+        
+        .orbit-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .orbit-path {
+            position: absolute;
+            width: 340px;
+            height: 340px;
+            border-radius: 50%;
+            border: 2px dashed rgba(156, 163, 175, 0.3);
+            animation: rotate 30s linear infinite;
+        }
+        
+        .orbit-path:hover {
+            animation-play-state: paused;
+        }
+        
+        .orbit-item {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .icon-wrapper {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            animation: counter-rotate 30s linear infinite;
+        }
+        
+        .orbit-path:hover .icon-wrapper {
+            animation-play-state: paused;
+        }
+        
+        .orbit-item:hover .icon-wrapper, .orbit-item.active .icon-wrapper {
+            transform: scale(1.2);
+            border-color: #3b82f6;
+            color: #2563eb;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
+        }
+        
+        .center-orb {
+            width: 150px;
+            height: 150px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        
+        .center-dot {
+            width: 20px;
+            height: 20px;
+            background: #3b82f6;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes counter-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+        
+        .detail-card {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0;
+            transform: translateX(50px);
+            pointer-events: none;
+        }
+        
+        .detail-card.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+        
+        .label-popup {
+            position: absolute;
+            bottom: -35px;
+            background: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .orbit-item:hover .label-popup {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 py-12 px-4 text-center shadow-sm">
+        <h1 class="text-5xl font-extrabold text-gray-900 tracking-tight">Vivaan Shahani</h1>
+        <p class="text-xl text-gray-600 mt-2 font-medium">High-Achieving Student | Innovator | Debater</p>
+        <div class="mt-4 flex justify-center space-x-4 text-sm text-gray-500">
+            <a href="mailto:vivaan.shahani@gmail.com" class="text-blue-600 hover:underline">vivaan.shahani@gmail.com</a>
+            <span>•</span>
+            <span>Scarsdale, NY</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col lg:flex-row items-center justify-center p-8 relative overflow-hidden">
+        
+        <!-- Interactive Circle -->
+        <div id="circle-section" class="flex items-center justify-center w-full lg:w-1/2 transition-transform duration-700">
+            <div class="orbit-container">
+                <div class="center-orb">
+                    <div class="center-dot"></div>
+                </div>
+                <div class="orbit-path" id="orbit-path">
+                    <!-- Items will be injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Detail Card Container -->
+        <div id="detail-container" class="detail-card fixed lg:relative right-0 lg:right-auto w-full max-w-xl p-6 lg:w-1/2">
+            <div class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-h-[80vh]">
+                <div class="bg-gray-50 p-6 border-b border-gray-100 flex justify-between items-center">
+                    <div class="flex items-center space-x-3">
+                        <div id="card-icon" class="text-blue-600"></div>
+                        <h2 id="card-title" class="text-2xl font-bold text-gray-900"></h2>
+                    </div>
+                    <button onclick="closeDetails()" class="p-2 hover:bg-gray-200 rounded-full transition-colors">
+                        <i data-lucide="x" class="w-6 h-6 text-gray-400"></i>
+                    </button>
+                </div>
+                <div class="p-8 overflow-y-auto">
+                    <p id="card-description" class="text-lg text-gray-600 italic border-l-4 border-blue-500 pl-4 mb-8"></p>
+                    <div id="card-details" class="space-y-8">
+                        <!-- Details will be injected -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const resumeData = [
+            {
+                id: 'education',
+                title: 'Education',
+                icon: 'book-open',
+                description: "High-achieving 10th-grade student (Rising Junior) with a 3.98 GPA.",
+                details: [
+                    { subtitle: 'Edgemont Jr./Sr. High School', text: 'Expected Graduation: 2028. Academic Standing: Straight A\'s; Honors in Math, English, and Latin.' },
+                    { subtitle: 'Kumon Math Program', text: 'Completed the full curriculum through advanced college-level calculus by 9th Grade.' },
+                    { subtitle: 'Summer Programs', text: 'Harvard University Debate Council Summer Workshop (2024, 2025).' }
+                ]
+            },
+            {
+                id: 'experience',
+                title: 'Experience',
+                icon: 'briefcase',
+                description: "Entrepreneurial leader with a track record of founding successful initiatives.",
+                details: [
+                    { subtitle: 'Co-Founder | Solarflare', text: 'Independent Robotics Team & YouTube Channel (2022-2024). Managed operations, fundraising, and coding.' },
+                    { subtitle: 'Co-Founder | Math Monkey', text: 'Launched a math tutoring business for younger students and co-founded Barky Bites at age 10.' }
+                ]
+            },
+            {
+                id: 'volunteer',
+                title: 'Leadership',
+                icon: 'users',
+                description: "Nationally ranked competitive debater and community volunteer.",
+                details: [
+                    { subtitle: '3D Printing Instructor', text: 'Teaching 3D modeling and CAD to children at Edgemont Chinese School.' },
+                    { subtitle: 'Co-Founder | debate101.org', text: 'Non-profit debate organization, managing brand identity and web development.' },
+                    { subtitle: 'Varsity Debate', text: 'National Quarterfinalist. Expert in Lincoln-Douglas format and complex data analysis.' }
+                ]
+            },
+            {
+                id: 'skills',
+                title: 'Skills',
+                icon: 'star',
+                description: "Diverse skillset spanning technical, musical, and athletic disciplines.",
+                details: [
+                    { subtitle: 'Technical', text: 'Python, Java, Excel (Data Analysis), 3D Modeling (CAD), Video/Audio Editing.' },
+                    { subtitle: 'Arts & Athletics', text: 'Saxophonist, Professional DJ, Taekwondo Black Belt, Varsity Lacrosse player.' },
+                    { subtitle: 'Journalism', text: 'Independent journalist with 15,000+ reads on international affairs.' }
+                ]
+            }
+        ];
+
+        const orbitPath = document.getElementById('orbit-path');
+        const detailContainer = document.getElementById('detail-container');
+        const circleSection = document.getElementById('circle-section');
+
+        // Initialize Orbit
+        resumeData.forEach((item, index) => {
+            const angle = (index / resumeData.length) * 360;
+            const orbitItem = document.createElement('div');
+            orbitItem.className = 'orbit-item';
+            orbitItem.style.left = '50%';
+            orbitItem.style.top = '50%';
+            orbitItem.style.transform = `rotate(${angle}deg) translate(170px) rotate(-${angle}deg) translate(-50%, -50%)`;
+            
+            orbitItem.innerHTML = `
+                <div class="icon-wrapper" onclick="showDetails('${item.id}')">
+                    <i data-lucide="${item.icon}"></i>
+                    <div class="label-popup">${item.title}</div>
+                </div>
+            `;
+            orbitPath.appendChild(orbitItem);
+        });
+
+        lucide.createIcons();
+
+        function showDetails(id) {
+            const data = resumeData.find(d => d.id === id);
+            
+            // Set content
+            document.getElementById('card-title').innerText = data.title;
+            document.getElementById('card-description').innerText = data.description;
+            document.getElementById('card-icon').innerHTML = `<i data-lucide="${data.icon}" class="w-8 h-8"></i>`;
+            
+            const detailsList = document.getElementById('card-details');
+            detailsList.innerHTML = data.details.map(d => `
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800">${d.subtitle}</h3>
+                    <p class="text-gray-500 mt-1">${d.text}</p>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+
+            // Animate
+            detailContainer.classList.add('active');
+            if (window.innerWidth > 1024) {
+                circleSection.style.transform = 'translateX(-20%)';
+            }
+        }
+
+        function closeDetails() {
+            detailContainer.classList.remove('active');
+            circleSection.style.transform = 'translateX(0)';
+        }
+    </script>
+</body>
 </html>
