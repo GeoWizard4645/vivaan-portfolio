@@ -15,7 +15,7 @@
             color: #1f2937;
             overflow-x: hidden;
         }
-        
+
         .orbit-container {
             position: relative;
             width: 400px;
@@ -24,7 +24,7 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .orbit-path {
             position: absolute;
             width: 340px;
@@ -33,11 +33,11 @@
             border: 2px dashed rgba(156, 163, 175, 0.3);
             animation: rotate 30s linear infinite;
         }
-        
+
         .orbit-path:hover {
             animation-play-state: paused;
         }
-        
+
         .orbit-item {
             position: absolute;
             width: 80px;
@@ -45,7 +45,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+
         .icon-wrapper {
             width: 70px;
             height: 70px;
@@ -60,18 +60,18 @@
             transition: all 0.3s ease;
             animation: counter-rotate 30s linear infinite;
         }
-        
+
         .orbit-path:hover .icon-wrapper {
             animation-play-state: paused;
         }
-        
+
         .orbit-item:hover .icon-wrapper, .orbit-item.active .icon-wrapper {
             transform: scale(1.2);
             border-color: #3b82f6;
             color: #2563eb;
             box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
         }
-        
+
         .center-orb {
             width: 150px;
             height: 150px;
@@ -83,7 +83,7 @@
             justify-content: center;
             z-index: 10;
         }
-        
+
         .center-dot {
             width: 20px;
             height: 20px;
@@ -91,30 +91,30 @@
             border-radius: 50%;
             box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
         }
-        
+
         @keyframes rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
-        
+
         @keyframes counter-rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(-360deg); }
         }
-        
+
         .detail-card {
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             opacity: 0;
             transform: translateX(50px);
             pointer-events: none;
         }
-        
+
         .detail-card.active {
             opacity: 1;
             transform: translateX(0);
             pointer-events: auto;
         }
-        
+
         .label-popup {
             position: absolute;
             bottom: -35px;
@@ -128,7 +128,7 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-        
+
         .orbit-item:hover .label-popup {
             opacity: 1;
         }

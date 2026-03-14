@@ -1,0 +1,12 @@
+{
+  "name": "vivaan-portfolio",
+  "private": true,
+  "version": "1.0.0",
+  "homepage": "https://GeoWizard4645.github.io/vivaan-portfolio",
+  "scripts": {
+    "deploy": "gh-pages -d ."
+  },
+  "dependencies": {
+    "gh-pages": "^6.3.0"
+  }
+}
